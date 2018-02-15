@@ -1,8 +1,8 @@
 import re
 
-from lib.nofloat import to_int
-from lib.log import debug, warning
-from lib.defs import preprocess
+from .lib.nofloat import to_int
+from .lib.log import debug, warning
+from .lib.defs import preprocess
 
 
 class _Definitions:
@@ -65,10 +65,10 @@ class _Definitions:
             n += 1
             debug("*** pass %s ***", n)
             # for every object
-            for ko, o in d.items():
-                if o.has_key("is_a"):
+            for ko, o in list(d.items()):
+                if "is_a" in o:
                     # init "expanded_is_a" (first pass)
-                    if expanded_is_a and not o.has_key("expanded_is_a"):
+                    if expanded_is_a and "expanded_is_a" not in o:
                         o["expanded_is_a"] = o["is_a"][:]
                         debug("%s.%s = %s", ko, "expanded_is_a", o["expanded_is_a"])
                         modified = True
@@ -76,7 +76,7 @@ class _Definitions:
                     for p in o["is_a"]:
                         if p in d:
                             # for every attribute
-                            for k, v in d[p].items():
+                            for k, v in list(d[p].items()):
                                 if expanded_is_a and k == "expanded_is_a":
                                     # add parents from "expanded_is_a" of parent
                                     # (if not yet in the object's "expanded_is_a")
@@ -95,13 +95,13 @@ class _Definitions:
 
     def _val(self, obj, attr):
         d = self._dict
-        if not d.has_key(obj):
+        if obj not in d:
             return
         o = d[obj]
-        if not o.has_key(attr):
-            if o.has_key("is_a"):
+        if attr not in o:
+            if "is_a" in o:
                 for p in o["is_a"]:
-                    if d.has_key(p) and self._val(p, attr) is not None:
+                    if p in d and self._val(p, attr) is not None:
                         return self._val(p, attr)
             return
         return o[attr]
@@ -119,7 +119,7 @@ class _Definitions:
         return self._dict[obj]
 
     def classnames(self):
-        return self._dict.keys()
+        return list(self._dict.keys())
 
     def copy(self, other):
         self._dict = other._dict
@@ -247,7 +247,7 @@ def get_ai(name):
     return _ai[name]
 
 def get_ai_names():
-    return _ai.keys()
+    return list(_ai.keys())
 
 # define two convenient variables
 

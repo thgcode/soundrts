@@ -4,7 +4,7 @@ except ImportError:
     from md5 import md5
 import os
 
-import res
+from . import res
 
 
 VERSION = "1.2-a11-dev"

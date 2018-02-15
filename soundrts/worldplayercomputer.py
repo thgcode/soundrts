@@ -1,12 +1,12 @@
 import re
 
-from definitions import get_ai, rules
-from lib.log import debug, info, warning, exception
-from version import VERSION
-from worldplayerbase import Player
-import worldrandom
-from worldresource import Meadow, Deposit, Corpse
-from worldunit import Worker, BuildingSite, Soldier
+from .definitions import get_ai, rules
+from .lib.log import debug, info, warning, exception
+from .version import VERSION
+from .worldplayerbase import Player
+from . import worldrandom
+from .worldresource import Meadow, Deposit, Corpse
+from .worldunit import Worker, BuildingSite, Soldier
 
 
 class Computer(Player):
@@ -323,7 +323,7 @@ class Computer(Player):
                         if u.place not in starts: starts[u.place] = 1
                         else: starts[u.place] += 1
                 if starts:
-                    starting_place = sorted(starts.items(), key=lambda x: x[1])[-1][0]
+                    starting_place = sorted(list(starts.items()), key=lambda x: x[1])[-1][0]
                 else:
                     starting_place = self.units[0].place
             else:

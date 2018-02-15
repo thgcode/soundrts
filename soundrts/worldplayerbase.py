@@ -3,14 +3,14 @@ import inspect
 import re
 import string
 
-from constants import MAX_NB_OF_RESOURCE_TYPES
-from definitions import rules, style
-from lib.log import debug, warning
-from lib.msgs import encode_msg, nb2msg
-from lib.nofloat import PRECISION
-from worldentity import NotEnoughSpaceError, Entity
-from worldresource import Corpse
-from worldupgrade import Upgrade
+from .constants import MAX_NB_OF_RESOURCE_TYPES
+from .definitions import rules, style
+from .lib.log import debug, warning
+from .lib.msgs import encode_msg, nb2msg
+from .lib.nofloat import PRECISION
+from .worldentity import NotEnoughSpaceError, Entity
+from .worldresource import Corpse
+from .worldupgrade import Upgrade
 
 
 class ZoomTarget(Entity):
@@ -138,7 +138,7 @@ class Player(object):
                     self.world.unit_class(upgrade_name).upgrade_player(self)
 
     def _update_observed_objects(self):
-        for o in self.observed_objects.keys():
+        for o in list(self.observed_objects.keys()):
             if self.observed_objects[o] < self.world.time:
                 del self.observed_objects[o]
                 self.update_perception_of_object(o)
@@ -439,7 +439,7 @@ class Player(object):
     def lang_order(self, args):
         select, orders = args
         for x in select:
-            if self.world.grid.has_key(x):
+            if x in self.world.grid:
                 default_square = x
                 multiplicator = 1
             elif re.match("[0-9]+$", x):
@@ -486,7 +486,7 @@ class Player(object):
     def lang_add_units(self, items, target=None, decay=0, from_corpse=False, corpses=[], notify=True):
         multiplicator = 1
         for i in items:
-            if self.world.grid.has_key(i):
+            if i in self.world.grid:
                 sq = self.world.grid[i]
                 multiplicator = 1
             elif re.match("[0-9]+$", i):
@@ -633,13 +633,13 @@ class Player(object):
     def lang_add_objective(self, args):
         n = args[0]
         o = Objective(n, [int(x) for x in args[1:]])
-        if not self.objectives.has_key(n):
+        if n not in self.objectives:
             self.objectives[n] = o
             self.send_voice_important([4268] + o.description) # "new objective"
 
     def lang_objective_complete(self, args):
         n = args[0]
-        if self.objectives.has_key(n):
+        if n in self.objectives:
             self.send_voice_important([4269] + self.objectives[n].description)
             del self.objectives[n]
             if self.objectives == {}:

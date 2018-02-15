@@ -28,7 +28,7 @@ def decode(s):
     for r in s.split(" "):
         if "-" in r:
             a, b = r.split("-")
-            result.extend(range(int(a),int(b)+1))
+            result.extend(list(range(int(a),int(b)+1)))
         else:
             result.append(int(r))
     return [str(i) for i in result]
@@ -38,11 +38,11 @@ if __name__ == "__main__":
 
     def test(a, b):
         c = encode(a)
-        print '%s => "%s"' % (a, b)
+        print('%s => "%s"' % (a, b))
         if c != b:
-            print "ERROR!", c
+            print("ERROR!", c)
         if decode(encode(a)) != a:
-            print "ENCODE-DECODE ERROR!"
+            print("ENCODE-DECODE ERROR!")
 
     test(["0", "1", "2"], "0-2")
     test(["0", "1", "2"], "0-2")

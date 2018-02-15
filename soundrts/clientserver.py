@@ -4,14 +4,14 @@ import telnetlib
 import threading
 import time
 
-from clientmedia import voice
-from clientservermenu import ServerMenu
-from clientversion import revision_checker
-import config
-import options
-from lib.log import info, exception
-import servermain
-from version import compatibility_version
+from .clientmedia import voice
+from .clientservermenu import ServerMenu
+from .clientversion import revision_checker
+from . import config
+from . import options
+from .lib.log import info, exception
+from . import servermain
+from .version import compatibility_version
 
 
 class _Error(Exception): pass

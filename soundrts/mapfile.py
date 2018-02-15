@@ -7,11 +7,11 @@ import os.path
 import re
 import shutil
 
-import res
-from lib.log import debug, exception
-from lib import zipdir
-from paths import TMP_PATH
-import world
+from . import res
+from .lib.log import debug, exception
+from .lib import zipdir
+from .paths import TMP_PATH
+from . import world
 
 
 class Map(object):
@@ -26,20 +26,20 @@ class Map(object):
             self._load_header()
 
     def load_resources(self):
-        from clientmedia import sounds, res
+        from .clientmedia import sounds, res
         sounds.enter_map(res, self.path)
 
     def unload_resources(self):
-        from clientmedia import sounds
+        from .clientmedia import sounds
         sounds.exit_map()
 
     def load_rules_and_ai(self, res):
-        from definitions import rules, load_ai
+        from .definitions import rules, load_ai
         rules.load(res.get_text_file("rules", append=True), self.campaign_rules, self.additional_rules)
         load_ai(res.get_text_file("ai", append=True), self.campaign_ai, self.additional_ai)
 
     def load_style(self, res):
-        from definitions import style
+        from .definitions import style
         style.load(res.get_text_file("ui/style", append=True, localize=True), self.campaign_style, self.additional_style)
 
     def _read_additional_file(self, n):

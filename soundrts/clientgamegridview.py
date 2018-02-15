@@ -2,9 +2,9 @@ from math import sin, cos, radians
 
 import pygame
 
-from lib.screen import get_screen, draw_line, draw_rect
-from lib.log import warning
-from lib.nofloat import square_of_distance
+from .lib.screen import get_screen, draw_line, draw_rect
+from .lib.log import warning
+from .lib.nofloat import square_of_distance
 
 
 R = int(0.5 * 10)
@@ -114,7 +114,7 @@ class GridView(object):
                                  (x - W + hp_prop * (2 * W) / 100, y - R - 2))
 
     def display_objects(self):
-        for o in self.interface.dobjets.values():
+        for o in list(self.interface.dobjets.values()):
             self.display_object(o)
             if o.place is None and not o.is_inside \
                and not (self.interface.already_asked_to_quit or
@@ -171,7 +171,7 @@ class GridView(object):
     def object_from_mousepos(self, pos):
         self._update_coefs()
         x, y = pos
-        for o in self.interface.dobjets.values():
+        for o in list(self.interface.dobjets.values()):
             xo, yo = self._object_coords(o)
             if square_of_distance(x, y, xo, yo) <= R2 + 1: # XXX + 1 ?
                 return o

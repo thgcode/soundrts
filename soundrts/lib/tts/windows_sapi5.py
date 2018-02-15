@@ -24,7 +24,7 @@ class TTS(object):
         _engine.Speak(text, sum(args))
 
     def Stop(self):
-        self.Speak(u"", tts_async, tts_purge_before_speak)
+        self.Speak("", tts_async, tts_purge_before_speak)
 
 
 def Create():

@@ -5,17 +5,17 @@ except ImportError:
 import platform
 import sys
 import time
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
-from version import VERSION
-from constants import METASERVER_URL, NEWLINE_REPLACEMENT, SPACE_REPLACEMENT
-from lib.log import debug, warning, exception
+from .version import VERSION
+from .constants import METASERVER_URL, NEWLINE_REPLACEMENT, SPACE_REPLACEMENT
+from .lib.log import debug, warning, exception
 
 
 def send_error_to_metaserver(error_msg):
     try:
-        params = urllib.urlencode({"method": "add", "msg": error_msg})
-        urllib.urlopen(METASERVER_URL + "errors.php?%s" % params).read()
+        params = urllib.parse.urlencode({"method": "add", "msg": error_msg})
+        urllib.request.urlopen(METASERVER_URL + "errors.php?%s" % params).read()
     except:
         exception("could not send error message to web server")
 

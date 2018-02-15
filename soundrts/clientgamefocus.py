@@ -1,6 +1,6 @@
-from lib.voice import voice
-from lib.log import warning
-from lib.nofloat import PRECISION
+from .lib.voice import voice
+from .lib.log import warning
+from .lib.nofloat import PRECISION
 
 
 _subzone_name = {
@@ -60,7 +60,7 @@ class Zoom(object):
 
     def move_to(self, o):
         self.parent.place = o.place
-        for self.sub_x, self.sub_y in _subzone_name.keys():
+        for self.sub_x, self.sub_y in list(_subzone_name.keys()):
             self.update_coords()
             if self.contains(o):
                 self.parent.set_obs_pos()

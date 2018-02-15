@@ -7,7 +7,7 @@ import os
 import string
 import zipfile
 
-from log import warning
+from .log import warning
 
 
 def zipdir(target_dir, dest_file):
@@ -41,7 +41,7 @@ if __name__ == "__main__":
     if os.path.exists(dest):
         shutil.rmtree(dest)
     unzipdir(zf, dest)
-    raw_input("Check %s and %s, then press Enter to continue the test." % (zf, dest))
+    input("Check %s and %s, then press Enter to continue the test." % (zf, dest))
     try:
         unzipdir(zf, dest)
     except:

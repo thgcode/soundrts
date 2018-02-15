@@ -6,7 +6,7 @@ from soundrts.lib.sound_cache import sounds
 
 
 def is_text(o):
-    return isinstance(o, unicode)
+    return isinstance(o, str)
 
 
 class Message(object):

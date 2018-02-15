@@ -27,7 +27,7 @@ class DummyClient(worldclient.DummyClient):
 
     def push(self, *args):
         if False: # remove this to check the values
-            print args
+            print(args)
  
 
 class _PlayerBaseTestCase(unittest.TestCase):

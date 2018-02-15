@@ -6,12 +6,12 @@ import time
 import pygame
 from pygame.locals import QUIT, KEYDOWN, K_LSHIFT, K_RSHIFT, K_KP_ENTER, K_RETURN, K_ESCAPE, K_BACKSPACE, USEREVENT, K_TAB, KMOD_ALT, K_LEFT, K_UP, KMOD_SHIFT, K_DOWN, K_RIGHT, K_F2, KMOD_CTRL, K_F1, K_F5, K_LALT, K_RALT, K_F6, K_HOME, K_KP_PLUS, K_END, K_KP_MINUS, K_F7
 
-from clienthelp import help_msg
-from clientmedia import voice, modify_volume, toggle_fullscreen, sounds
-from lib.log import warning
-from lib.msgs import nb2msg
-from lib.sound import psounds
-from paths import TMP_PATH
+from .clienthelp import help_msg
+from .clientmedia import voice, modify_volume, toggle_fullscreen, sounds
+from .lib.log import warning
+from .lib.msgs import nb2msg
+from .lib.sound import psounds
+from .paths import TMP_PATH
 
 
 def string_to_msg(s, spell=True):
@@ -46,9 +46,9 @@ def input_string(msg=[], pattern="^[a-zA-Z0-9]$", default="", spell=True):
             elif e.key == K_BACKSPACE:
                 s = s[:-1]
                 voice.item(string_to_msg(s, spell))
-            elif re.match(pattern, e.unicode) != None:
+            elif re.match(pattern, e.str) != None:
                 try:
-                    c = e.unicode.encode("ascii") # telnetlib doesn't like unicode
+                    c = e.str.encode("ascii") # telnetlib doesn't like unicode
                     s += c
                     voice.item(string_to_msg(c) + [9999] + string_to_msg(s, spell))
                 except:
@@ -153,7 +153,7 @@ class Menu(object):
         elif e.key == K_F5:
             voice.previous()
         elif e.key in [K_LALT,K_RALT]:
-            voice.next()
+            next(voice)
         elif e.key == K_F6:
             voice.next(history_only=True)
         elif e.key in [K_HOME, K_KP_PLUS]:
@@ -167,10 +167,10 @@ class Menu(object):
                 msg = input_string(msg=[4288], pattern="^[a-zA-Z0-9 .,'@#$%^&*()_+=?!]$", spell=False)
                 if msg:
                     self.server.write_line("say %s" % msg)
-        elif e.unicode and e.mod & KMOD_SHIFT:
-            self._select_next_choice(e.unicode, -1)
-        elif e.unicode:
-            self._select_next_choice(e.unicode)
+        elif e.str and e.mod & KMOD_SHIFT:
+            self._select_next_choice(e.str, -1)
+        elif e.str:
+            self._select_next_choice(e.str)
         elif e.key not in [K_LSHIFT,K_RSHIFT]:
             voice.item([4052])
 

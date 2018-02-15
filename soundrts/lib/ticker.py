@@ -32,11 +32,11 @@ class Ticker(_Thread):
 if __name__ == "__main__":
     import time
     def _print_tick():
-        print "tick"
+        print("tick")
     t = Ticker(1.0, _print_tick)
-    print "start..."
+    print("start...")
     t.start()
     time.sleep(5)
-    print "cancel..."
+    print("cancel...")
     t.cancel()
     time.sleep(5)

@@ -1,14 +1,14 @@
-import ConfigParser
+import configparser
 import os
 import re
 
-from clientmedia import voice, sounds, play_sequence, res
-from clientmenu import Menu
-import config
-from game import MissionGame
-from mapfile import Map
-from lib.msgs import nb2msg
-from paths import CAMPAIGNS_CONFIG_PATH
+from .clientmedia import voice, sounds, play_sequence, res
+from .clientmenu import Menu
+from . import config
+from .game import MissionGame
+from .mapfile import Map
+from .lib.msgs import nb2msg
+from .paths import CAMPAIGNS_CONFIG_PATH
 
 
 class MissionChapter(Map):
@@ -127,7 +127,7 @@ class Campaign(object):
         return re.sub("[^a-zA-Z0-9]", "_", self.path)
 
     def _get_bookmark(self):
-        c = ConfigParser.SafeConfigParser()
+        c = configparser.SafeConfigParser()
         if os.path.isfile(CAMPAIGNS_CONFIG_PATH):
             c.readfp(open(CAMPAIGNS_CONFIG_PATH))
         try:
@@ -139,7 +139,7 @@ class Campaign(object):
         return self.chapters[:self._get_bookmark() + 1]
 
     def _set_bookmark(self, number):
-        c = ConfigParser.SafeConfigParser()
+        c = configparser.SafeConfigParser()
         if os.path.isfile(CAMPAIGNS_CONFIG_PATH):
             c.readfp(open(CAMPAIGNS_CONFIG_PATH))
         if self._get_id() not in c.sections():

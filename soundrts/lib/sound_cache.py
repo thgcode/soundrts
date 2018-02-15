@@ -41,7 +41,7 @@ class SoundCache(object):
         for layer in self.layers:
             if key in layer.sounds:
                 s = layer.sounds[key]
-                if isinstance(s, basestring): # full path of the sound
+                if isinstance(s, str): # full path of the sound
                     # load the sound now
                     try:
                         layer.sounds[key] = pygame.mixer.Sound(s)
@@ -81,8 +81,8 @@ class SoundCache(object):
 
     def _add_special_values(self):
         """add some values not defined in text files"""
-        self.default.txt[SHORT_SILENCE] = u","
-        self.default.txt[SILENCE] = u"."
+        self.default.txt[SHORT_SILENCE] = ","
+        self.default.txt[SILENCE] = "."
 
     def load_default(self, res, on_loading=None, on_complete=None):
         """load the default layer into memory from res"""
@@ -124,16 +124,16 @@ class SoundCache(object):
         if self.has_text(key):
             return self.get_text(key)
         if re.match("^[0-9]+$", key) is not None and int(key) >= NB_ENCODE_SHIFT:
-            return u"%s" % (int(key) - NB_ENCODE_SHIFT)
+            return "%s" % (int(key) - NB_ENCODE_SHIFT)
         if self.has_sound(key):
             return self.get_sound(key)
         if re.match("^[0-9]+$", key) is not None:
             warning("this sound may be missing: %s", sound_number)
         try:
-            return unicode(key)
+            return str(key)
         except:
             warning("Unicode error in %s", repr(key))
-            return unicode(key, errors="ignore")
+            return str(key, errors="ignore")
 
 
 sounds = SoundCache()

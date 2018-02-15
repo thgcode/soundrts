@@ -1,7 +1,7 @@
 import copy
 
-from lib.nofloat import to_int, PRECISION
-from worldentity import Entity
+from .lib.nofloat import to_int, PRECISION
+from .worldentity import Entity
 
 
 class Deposit(Entity):

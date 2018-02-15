@@ -178,9 +178,9 @@ class ResourceLoader(object):
                         key, value = line.split(None, 1)
                         if value:
                             try:
-                                value = unicode(value, encoding_name)
+                                value = str(value, encoding_name)
                             except ValueError:
-                                value = unicode(value, encoding_name, "replace")
+                                value = str(value, encoding_name, "replace")
                                 warning("in '%s', encoding error: %s", TXT_FILE, line)
                             result[key] = value
                         else:

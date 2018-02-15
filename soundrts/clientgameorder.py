@@ -1,8 +1,8 @@
-from definitions import style
-from lib.log import warning
-from lib.msgs import nb2msg
-from lib.nofloat import PRECISION
-from worldorders import ORDERS_DICT
+from .definitions import style
+from .lib.log import warning
+from .lib.msgs import nb2msg
+from .lib.nofloat import PRECISION
+from .worldorders import ORDERS_DICT
 
 
 class OrderView(object):
@@ -15,7 +15,7 @@ class OrderView(object):
     def __init__(self, model, interface=None):
         self.model = model
         self.interface = interface
-        for k, v in style.get_dict(model.keyword).items():
+        for k, v in list(style.get_dict(model.keyword).items()):
             if hasattr(self, k):
                 setattr(self, k, v)
             else:
@@ -70,11 +70,11 @@ class OrderView(object):
 
     def get_shortcut(self):
         if self.shortcut:
-            return unicode(self.shortcut[0])
+            return str(self.shortcut[0])
         if self.type and self.type.type_name:
             s = style.get(self.type.type_name, "shortcut", False)
             if s:
-                return unicode(s[0])
+                return str(s[0])
 
 
 def order_title(order):
@@ -109,7 +109,7 @@ _orders_list = ()
 def update_orders_list():
     global _orders_list
     # this sorted list of order classes is used when generating the menu
-    _orders_list = sorted([_x for _x in ORDERS_DICT.values()
+    _orders_list = sorted([_x for _x in list(ORDERS_DICT.values())
                           if _has_ord_index(_x.keyword)],
                          key=lambda x:_ord_index(x.keyword))
 
@@ -130,4 +130,4 @@ def create_order(order, unit):
     o = order.split()
     return OrderView(ORDERS_DICT[o[0]](unit, o[1:]))
 
-from clientgameentity import EntityView, substitute_args
+from .clientgameentity import EntityView, substitute_args

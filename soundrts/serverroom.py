@@ -2,16 +2,16 @@ import os.path
 import random
 import time
 
-import config
-import options
-from constants import NEWLINE_REPLACEMENT, SPACE_REPLACEMENT, VIRTUAL_TIME_INTERVAL
-from definitions import Style
-from lib.log import debug, info, warning
-from lib.msgs import insert_silences, nb2msg
-from paths import TMP_PATH
-import res
+from . import config
+from . import options
+from .constants import NEWLINE_REPLACEMENT, SPACE_REPLACEMENT, VIRTUAL_TIME_INTERVAL
+from .definitions import Style
+from .lib.log import debug, info, warning
+from .lib.msgs import insert_silences, nb2msg
+from .paths import TMP_PATH
+from . import res
 
-import version
+from . import version
 DEBUG_MODE = version.IS_DEV_VERSION
 
 
@@ -221,7 +221,7 @@ class Game(object):
     _nb_allowed_alerts = 1
 
     def _process_check_strings(self):
-        check_strings = [queue[0][1] for queue in self.all_orders.values()]
+        check_strings = [queue[0][1] for queue in list(self.all_orders.values())]
         if check_strings.count(check_strings[0]) != len(check_strings) \
             and self._nb_allowed_alerts > 0:
             time_strings = [s.split("-", 1) for s in check_strings]
@@ -243,7 +243,7 @@ class Game(object):
         self._dispatch_orders_if_needed()
 
     def _orders_are_ready(self):
-        for queue in self.all_orders.values():
+        for queue in list(self.all_orders.values()):
             if not queue:
                 return False
         return True
@@ -256,7 +256,7 @@ class Game(object):
             self._process_check_strings()
             # remove orders from the queue and pack them
             _all_orders = []
-            for player, queue in self.all_orders.items():
+            for player, queue in list(self.all_orders.items()):
                 orders = queue.pop(0)[0]
                 if SPACE_REPLACEMENT in orders:
                     log_this = True
@@ -350,7 +350,7 @@ class Game(object):
         if self._timeout_reference is None:
             self._timeout_reference = time.time()
         elif time.time() > self._timeout_reference + config.timeout:
-            for player, queue in self.all_orders.items():
+            for player, queue in list(self.all_orders.items()):
                 if not queue:
                     player.handle_close() # disconnect player
                     break # don't continue! (might disconnect more players)

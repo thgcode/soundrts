@@ -1,7 +1,7 @@
 # constants used in more than one module
 # Some of them might find a better home later.
 
-from lib.nofloat import PRECISION
+from .lib.nofloat import PRECISION
 
 
 MAIN_METASERVER_URL = open("cfg/metaserver.txt").read().strip()

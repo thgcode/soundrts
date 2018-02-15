@@ -6,23 +6,23 @@ import time
 import pygame
 from pygame.locals import KEYDOWN
 
-from clientmedia import voice, play_sequence
-import clientgame
-from clientgameorder import update_orders_list
-import definitions
-import config
-from constants import METASERVER_URL, PROFILE
-from definitions import style, rules
-from lib.log import warning, exception
-from mapfile import Map
-from lib.msgs import nb2msg
-from paths import REPLAYS_PATH, SAVE_PATH, STATS_PATH
+from .clientmedia import voice, play_sequence
+from . import clientgame
+from .clientgameorder import update_orders_list
+from . import definitions
+from . import config
+from .constants import METASERVER_URL, PROFILE
+from .definitions import style, rules
+from .lib.log import warning, exception
+from .mapfile import Map
+from .lib.msgs import nb2msg
+from .paths import REPLAYS_PATH, SAVE_PATH, STATS_PATH
 import random
-import res
-import stats
-from version import VERSION, compatibility_version
-from world import World
-from worldclient import DirectClient, Coordinator, ReplayClient, DummyClient, HalfDummyClient, send_platform_version_to_metaserver 
+from . import res
+from . import stats
+from .version import VERSION, compatibility_version
+from .world import World
+from .worldclient import DirectClient, Coordinator, ReplayClient, DummyClient, HalfDummyClient, send_platform_version_to_metaserver 
 
 
 class _Game(object):
@@ -298,13 +298,13 @@ class ReplayGame(_Game):
                     version, mods)
         campaign_path_or_packed_map = self.replay_read()
         if game_type_name == "mission" and "***" not in campaign_path_or_packed_map:
-            from campaign import Campaign
+            from .campaign import Campaign
             self.map = Campaign(campaign_path_or_packed_map)._get(int(self.replay_read()))
         else:
             self.map = Map()
             self.map.unpack(campaign_path_or_packed_map)
         players = self.replay_read().split()
-        self.alliances = map(int, self.replay_read().split())
+        self.alliances = list(map(int, self.replay_read().split()))
         self.factions = self.replay_read().split()
         self.seed = int(self.replay_read())
         self.me = ReplayClient(players[0], self)

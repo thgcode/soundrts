@@ -1,6 +1,6 @@
-from constants import COLLISION_RADIUS, USE_RANGE_MARGIN
-from lib.log import exception, info
-from lib.nofloat import PRECISION
+from .constants import COLLISION_RADIUS, USE_RANGE_MARGIN
+from .lib.log import exception, info
+from .lib.nofloat import PRECISION
 
 
 class NotEnoughSpaceError(Exception): pass

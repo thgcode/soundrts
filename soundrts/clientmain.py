@@ -1,7 +1,7 @@
-from lib import log
-from lib.log import exception, warning
-from version import VERSION_FOR_BUG_REPORTS
-from paths import CLIENT_LOG_PATH
+from .lib import log
+from .lib.log import exception, warning
+from .version import VERSION_FOR_BUG_REPORTS
+from .paths import CLIENT_LOG_PATH
 log.set_version(VERSION_FOR_BUG_REPORTS)
 log.add_secure_file_handler(CLIENT_LOG_PATH, "w")
 log.add_http_handler("http://jlpo.free.fr/soundrts/metaserver")
@@ -17,22 +17,22 @@ import os
 import pickle
 import sys
 import time
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import webbrowser
 
-from clientmedia import voice, init_media, close_media
-from clientmenu import Menu, input_string, END_LOOP
-from clientserver import connect_and_play, start_server_and_connect
-from clientversion import revision_checker
-import config
-from constants import MAIN_METASERVER_URL
-from definitions import style
-from game import TrainingGame, ReplayGame
-from lib.msgs import nb2msg
-from paths import CONFIG_DIR_PATH, REPLAYS_PATH, SAVE_PATH
-import res
-import stats
-from version import VERSION
+from .clientmedia import voice, init_media, close_media
+from .clientmenu import Menu, input_string, END_LOOP
+from .clientserver import connect_and_play, start_server_and_connect
+from .clientversion import revision_checker
+from . import config
+from .constants import MAIN_METASERVER_URL
+from .definitions import style
+from .game import TrainingGame, ReplayGame
+from .lib.msgs import nb2msg
+from .paths import CONFIG_DIR_PATH, REPLAYS_PATH, SAVE_PATH
+from . import res
+from . import stats
+from .version import VERSION
 
 
 _ds = open("cfg/default_servers.txt").readlines()
@@ -47,7 +47,7 @@ class Application(object):
     def choose_server_ip_in_a_list(self):
         servers_list = None
         try:
-            f = urllib.urlopen(SERVERS_LIST_URL)
+            f = urllib.request.urlopen(SERVERS_LIST_URL)
             if f.read(len(SERVERS_LIST_HEADER)) == SERVERS_LIST_HEADER:
                 servers_list = f.readlines()
         except:
@@ -240,7 +240,7 @@ class Application(object):
             ([4118], END_LOOP),
             ])
         def main_menu():
-            import version
+            from . import version
             return Menu(["SoundRTS %s %s %s," % (version.VERSION, res.mods, res.soundpacks), 4030], [
             [[4031, 4032], single_player_menu.loop],
             [[4033, 4034], self.multiplayer_menu],

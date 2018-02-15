@@ -1,4 +1,4 @@
-from constants import MAX_NB_OF_RESOURCE_TYPES
+from .constants import MAX_NB_OF_RESOURCE_TYPES
 from soundrts.lib.nofloat import PRECISION
 
 

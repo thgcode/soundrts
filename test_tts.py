@@ -4,7 +4,7 @@ from soundrts.lib import tts
 
 
 def say(txt):
-    tts.speak(unicode(txt))
+    tts.speak(str(txt))
     while tts.is_speaking():
         time.sleep(.01)
 

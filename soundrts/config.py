@@ -1,12 +1,12 @@
 # read/write the config file
 
-import ConfigParser
+import configparser
 import platform
 import re
 import shutil
 
-from lib.log import warning
-from paths import CONFIG_FILE_PATH
+from .lib.log import warning
+from .paths import CONFIG_FILE_PATH
 
 
 login = "player"
@@ -20,7 +20,7 @@ timeout = 20.0
 
 
 def save():
-    c = ConfigParser.SafeConfigParser()
+    c = configparser.SafeConfigParser()
     c.add_section("general")
     c.set("general", "login", login)
     c.set("general", "mods", mods)
@@ -47,7 +47,7 @@ def load():
     except:
         new_file = True
     try:
-        c = ConfigParser.SafeConfigParser()
+        c = configparser.SafeConfigParser()
         c.readfp(f)
     except:
         error = True

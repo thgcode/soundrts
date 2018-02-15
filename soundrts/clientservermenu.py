@@ -1,14 +1,14 @@
 import re
 import time
 
-from clientmedia import voice, sounds, play_sequence
-from clientmenu import Menu
-from definitions import style
-from game import MultiplayerGame
-from lib.log import debug, warning
-import mapfile
-from lib.msgs import nb2msg, eval_msg_and_volume
-import res
+from .clientmedia import voice, sounds, play_sequence
+from .clientmenu import Menu
+from .definitions import style
+from .game import MultiplayerGame
+from .lib.log import debug, warning
+from . import mapfile
+from .lib.msgs import nb2msg, eval_msg_and_volume
+from . import res
 
 
 class _ServerMenu(Menu):
@@ -154,8 +154,8 @@ class _BeforeGameMenu(_ServerMenu):
                                  "faction %s %s" % (pn, r)))
 
     def srv_start_game(self, args):
-        players, alliances, factions = zip(*[p.split(",") for p in args[0].split(";")])
-        alliances = map(int, alliances)
+        players, alliances, factions = list(zip(*[p.split(",") for p in args[0].split(";")]))
+        alliances = list(map(int, alliances))
         me = args[1]
         seed = int(args[2])
         speed = float(args[3])

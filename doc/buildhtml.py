@@ -140,7 +140,7 @@ class Builder:
         config file settings and command-line options by
         `self.get_settings()`.
         """
-        for name, publisher in self.publishers.items():
+        for name, publisher in list(self.publishers.items()):
             option_parser = OptionParser(
                 components=publisher.components, read_config_files=1,
                 usage=usage, description=description)
@@ -195,12 +195,12 @@ class Builder:
         # BUG prune and ignore do not work 
         settings = self.get_settings('', directory)
         if settings.prune and (os.path.abspath(directory) in settings.prune):
-            print >>sys.stderr, '/// ...Skipping directory (pruned):', directory
+            print('/// ...Skipping directory (pruned):', directory, file=sys.stderr)
             sys.stderr.flush()
             names[:] = []
             return
         if not self.initial_settings.silent:
-            print >>sys.stderr, '/// Processing directory:', directory
+            print('/// Processing directory:', directory, file=sys.stderr)
             sys.stderr.flush()
         # settings.ignore grows many duplicate entries as we recurse
         # if we add patterns in config files or on the command line.
@@ -228,7 +228,7 @@ class Builder:
         settings._source = os.path.normpath(os.path.join(directory, name))
         settings._destination = settings._source[:-4]+'.html'
         if not self.initial_settings.silent:
-            print >>sys.stderr, '    ::: Processing:', name
+            print('    ::: Processing:', name, file=sys.stderr)
             sys.stderr.flush()
         try:
             if not settings.dry_run:
@@ -238,9 +238,9 @@ class Builder:
                               parser_name='restructuredtext',
                               writer_name=pub_struct.writer_name,
                               settings=settings)
-        except ApplicationError, error:
-            print >>sys.stderr, ('        Error (%s): %s'
-                                 % (error.__class__.__name__, error))
+        except ApplicationError as error:
+            print(('        Error (%s): %s'
+                                 % (error.__class__.__name__, error)), file=sys.stderr)
 
 
 if __name__ == "__main__":

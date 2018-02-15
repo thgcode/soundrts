@@ -4,10 +4,10 @@ import string
 import sys
 import time
 
-from lib.log import debug, info, warning, exception
-from lib.msgs import insert_silences, encode_msg
-import res
-from serverroom import Anonymous, InTheLobby, OrganizingAGame, WaitingForTheGameToStart, Game
+from .lib.log import debug, info, warning, exception
+from .lib.msgs import insert_silences, encode_msg
+from . import res
+from .serverroom import Anonymous, InTheLobby, OrganizingAGame, WaitingForTheGameToStart, Game
 
 
 class ConnectionToClient(asynchat.async_chat):
@@ -17,7 +17,8 @@ class ConnectionToClient(asynchat.async_chat):
     version = None
     game = None
 
-    def __init__(self, server, (connection, address)):
+    def __init__(self, server, xxx_todo_changeme):
+        (connection, address) = xxx_todo_changeme
         info("Connected: %s:%s" % address)
         asynchat.async_chat.__init__(self, connection)
         self.id = server.get_next_id()

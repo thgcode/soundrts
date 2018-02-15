@@ -1,5 +1,5 @@
 import math
-import Queue
+import queue
 import re
 import sys
 import time
@@ -7,25 +7,25 @@ import time
 import pygame
 from pygame.locals import KEYDOWN, QUIT, USEREVENT, K_TAB, KMOD_ALT, MOUSEBUTTONDOWN, KMOD_SHIFT, KMOD_CTRL, MOUSEBUTTONUP, MOUSEMOTION
 
-from clientgamegridview import GridView 
-from clientgamefocus import Zoom
-from clienthelp import help_msg
-from clientmedia import voice, sounds, sound_stop, modify_volume, get_fullscreen, toggle_fullscreen, play_sequence
-from lib.mouse import set_cursor
-from clientmenu import Menu, input_string
-from clientgameentity import EntityView
-from clientgamenews import must_be_said
-from clientgameorder import order_title, order_shortcut, order_args, order_comment, order_index
-import config
-from constants import ALERT_LIMIT, EVENT_LIMIT, VIRTUAL_TIME_INTERVAL
-from definitions import style
-from lib import group
-from lib.log import debug, warning, exception
-from lib.msgs import nb2msg, eval_msg_and_volume
-from lib.nofloat import PRECISION
-from version import VERSION
-from lib.sound import psounds, distance, angle, vision_stereo, stereo
-from lib.screen import set_game_mode, screen_render, get_screen,\
+from .clientgamegridview import GridView 
+from .clientgamefocus import Zoom
+from .clienthelp import help_msg
+from .clientmedia import voice, sounds, sound_stop, modify_volume, get_fullscreen, toggle_fullscreen, play_sequence
+from .lib.mouse import set_cursor
+from .clientmenu import Menu, input_string
+from .clientgameentity import EntityView
+from .clientgamenews import must_be_said
+from .clientgameorder import order_title, order_shortcut, order_args, order_comment, order_index
+from . import config
+from .constants import ALERT_LIMIT, EVENT_LIMIT, VIRTUAL_TIME_INTERVAL
+from .definitions import style
+from .lib import group
+from .lib.log import debug, warning, exception
+from .lib.msgs import nb2msg, eval_msg_and_volume
+from .lib.nofloat import PRECISION
+from .version import VERSION
+from .lib.sound import psounds, distance, angle, vision_stereo, stereo
+from .lib.screen import set_game_mode, screen_render, get_screen,\
     screen_render_subtitle
 
 
@@ -83,7 +83,7 @@ class GameInterface(object):
         self.grid_view = GridView(self)
         self.set_self_as_listener()
         voice.silent_flush()
-        self._srv_queue = Queue.Queue()
+        self._srv_queue = queue.Queue()
         self.scouted_squares = ()
         self.scouted_before_squares = ()
 
@@ -94,7 +94,7 @@ class GameInterface(object):
 
     def __setstate__(self, dictionary):
         self.__dict__.update(dictionary)
-        self._srv_queue = Queue.Queue()
+        self._srv_queue = queue.Queue()
 
     def set_self_as_listener(self):
         psounds.set_listener(self)
@@ -210,7 +210,7 @@ class GameInterface(object):
 
     def _object_choices(self, inc, types):
         choices = []
-        for o in self.dobjets.values():
+        for o in list(self.dobjets.values()):
             if self.is_selectable(o) and (
                 not types or getattr(o, "type_name", None) in types
                 or "useful" in types and o.is_a_useful_target()):
@@ -273,7 +273,7 @@ class GameInterface(object):
             msg += self.player.world.introduction + [9999]
         if self.player.objectives:
             msg += [4020, 9998] # "objectives:"
-            for o in self.player.objectives.values():
+            for o in list(self.player.objectives.values()):
                 msg += o.description + [9998]
         voice.item(msg)
 
@@ -336,7 +336,7 @@ class GameInterface(object):
         voice.previous()
 
     def cmd_history_stop(self):
-        voice.next()
+        next(voice)
 
     def cmd_history_next(self):
         voice.next(history_only=True)
@@ -500,7 +500,7 @@ class GameInterface(object):
     def _animate_objects(self):
         if time.time() >= self.previous_animation + .1:
             self.set_obs_pos()
-            for o in self.dobjets.values():
+            for o in list(self.dobjets.values()):
                 o.animate()
             self.previous_animation = time.time()
 
@@ -604,7 +604,7 @@ class GameInterface(object):
             self._process_srv_event(*e)
 
     def loop(self):
-        from clientserver import ConnectionAbortedError # TODO: remove the cyclic dependencies
+        from .clientserver import ConnectionAbortedError # TODO: remove the cyclic dependencies
         set_game_mode(True)
         pygame.event.clear()
         self.next_update = time.time()
@@ -682,7 +682,7 @@ class GameInterface(object):
     def _execute_order_shortcut(self, e):
         for o in self.orders():
             first_unit = self.dobjets[self.group[0]].model
-            if order_shortcut(o, first_unit) == e.unicode:
+            if order_shortcut(o, first_unit) == e.str:
                 self._select_order(o)
                 if order_args(o, first_unit) == 0:
                     self.cmd_validate()
@@ -785,7 +785,7 @@ class GameInterface(object):
         # remove missing objects
         pm = set(o.id for o in self.memory)
         pm.update(o.id for o in self.perception)
-        for i in self.dobjets.keys():
+        for i in list(self.dobjets.keys()):
             if i in pm:
                 continue
             self._delete_object(i)
@@ -896,7 +896,7 @@ class GameInterface(object):
         allies = []
         units = []
         resources = []
-        for obj in self.dobjets.values():
+        for obj in list(self.dobjets.values()):
             if not obj.is_in(place):
                 continue
             if zoom and not zoom.contains(obj):
@@ -935,7 +935,7 @@ class GameInterface(object):
             voice.item(prefix + [4205]) # no unit controlled
 
     def tell_enemies_in_square(self, place):
-        enemies = [x.short_title for x in self.dobjets.values()
+        enemies = [x.short_title for x in list(self.dobjets.values())
                    if x.is_in(place) and self.player.is_an_enemy(x.model)]
         if enemies:
             voice.info(self.summary(enemies) + [88, 107] + place.title) # ... "ennemi" "en" ...
@@ -981,7 +981,7 @@ class GameInterface(object):
     def squares_alert_if_needed(self):
         if self.alert_squares and (self.previous_squares_alert is None or
            time.time() > self.previous_squares_alert + 10):
-            titles = sorted([sq.title for sq, t in self.alert_squares.items()
+            titles = sorted([sq.title for sq, t in list(self.alert_squares.items())
                              if time.time() < t + 5]) # recent attacks only
             if len(titles) > 1:
                 titles.insert(-1, [23]) # "and"
@@ -1376,7 +1376,7 @@ class GameInterface(object):
             self.display()
 
     def _silence_square(self):
-        for o in self.dobjets.values():
+        for o in list(self.dobjets.values()):
             if not o.is_in(self.place):
                 o.stop()
         sound_stop(stop_voice_too=False) # cut the long nonlooping environment sounds
@@ -1423,7 +1423,7 @@ class GameInterface(object):
             return style.get("parameters", "no_path_in_this_direction"), True
         if self.place not in self.scouted_before_squares:
             return [], False
-        exits = [o for o in self.dobjets.values() if o.is_in(self.place)
+        exits = [o for o in list(self.dobjets.values()) if o.is_in(self.place)
                  and self.is_selectable(o)
                  and o.is_an_exit
                  and not o.is_blocked(self.player)]
@@ -1489,7 +1489,7 @@ class GameInterface(object):
         self._select_square_from_list(increment, self.scouted_squares)
 
     def cmd_select_conflict_square(self, increment):
-        enemy_units = [o for o in self.dobjets.values()
+        enemy_units = [o for o in list(self.dobjets.values())
                        if o.player and o.player.is_an_enemy(self.player)]
         conflict_squares = []
         for u in enemy_units:
@@ -1504,7 +1504,7 @@ class GameInterface(object):
 
     def cmd_select_resource_square(self, increment):
         resource_squares = []
-        for o in self.dobjets.values():
+        for o in list(self.dobjets.values()):
             if getattr(o, "resource_type", None) is not None:
                 if o.place not in resource_squares:
                     resource_squares.append(o.place)

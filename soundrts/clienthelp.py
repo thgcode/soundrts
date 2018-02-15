@@ -1,4 +1,4 @@
-import res
+from . import res
 
 
 def _read_table_from_file(name):

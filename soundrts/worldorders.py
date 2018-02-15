@@ -1,9 +1,9 @@
-from constants import MAX_NB_OF_RESOURCE_TYPES, ORDERS_QUEUE_LIMIT, VIRTUAL_TIME_INTERVAL
-from definitions import rules
-from lib.nofloat import to_int, PRECISION
-import worldrandom
-from worldresource import Meadow, Deposit, Corpse
-from worldroom import Square
+from .constants import MAX_NB_OF_RESOURCE_TYPES, ORDERS_QUEUE_LIMIT, VIRTUAL_TIME_INTERVAL
+from .definitions import rules
+from .lib.nofloat import to_int, PRECISION
+from . import worldrandom
+from .worldresource import Meadow, Deposit, Corpse
+from .worldroom import Square
 from soundrts.lib.nofloat import square_of_distance
 
 
@@ -1039,6 +1039,6 @@ class UnloadAllOrder(TransportOrder):
 
 # build a dictionary containing order classes, by keyword
 # for example: ORDERS_DICT["go"] == GoOrder
-ORDERS_DICT = dict([(_v.keyword, _v) for _v in locals().values()
+ORDERS_DICT = dict([(_v.keyword, _v) for _v in list(locals().values())
                     if hasattr(_v, "keyword") and issubclass(_v, Order)])
 

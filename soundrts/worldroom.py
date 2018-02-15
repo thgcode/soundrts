@@ -1,10 +1,10 @@
 import string
 
-from constants import COLLISION_RADIUS
-from lib.msgs import nb2msg
-from lib.nofloat import int_distance, int_angle, int_cos_1000, int_sin_1000
-from lib.priodict import priorityDictionary
-from worldresource import Meadow
+from .constants import COLLISION_RADIUS
+from .lib.msgs import nb2msg
+from .lib.nofloat import int_distance, int_angle, int_cos_1000, int_sin_1000
+from .lib.priodict import priorityDictionary
+from .worldresource import Meadow
 
 
 SPACE_LIMIT = 144
@@ -71,9 +71,9 @@ class Square(object):
 
     def __getstate__(self):
         d = self.__dict__.copy()
-        if d.has_key('spiral'):
+        if 'spiral' in d:
             del d['spiral']
-        if d.has_key('neighbours'):
+        if 'neighbours' in d:
             del d['neighbours']
         return d
 
@@ -184,7 +184,7 @@ class Square(object):
             self.menace[player] = 0
         for o in self.objects:
             if hasattr(o, "player"):
-                if self.menace.has_key(o.player):
+                if o.player in self.menace:
                     self.menace[o.player] += o.menace
                 else:
                     self.menace[o.player] = o.menace

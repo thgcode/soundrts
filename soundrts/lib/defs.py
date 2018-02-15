@@ -42,4 +42,4 @@ if __name__ == "__main__":
     import doctest
     doctest.testmod()
     if "idlelib" not in dir():
-        raw_input("press ENTER to exit")
+        input("press ENTER to exit")

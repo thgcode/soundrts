@@ -6,30 +6,30 @@ try:
 except ImportError:
     from md5 import md5
 import os.path
-import Queue
+import queue
 import re
 import string
 import time
 
-from lib import collision
-from constants import COLLISION_RADIUS, VIRTUAL_TIME_INTERVAL, PROFILE
-from definitions import rules, get_ai_names, load_ai
-from lib.log import warning, exception, info
-from lib.nofloat import to_int, int_distance, PRECISION
-from paths import MAPERROR_PATH
-import res
-from worldability import Ability
-from worldclient import DummyClient
-from worldexit import passage
-from worldorders import ORDERS_DICT
-from worldplayerbase import Player, normalize_cost_or_resources
-from worldplayercomputer import Computer
-from worldplayerhuman import Human
-import worldrandom
-from worldresource import Deposit, Meadow
-from worldroom import Square
-from worldunit import Unit, Worker, Soldier, Building, Effect
-from worldupgrade import Upgrade
+from .lib import collision
+from .constants import COLLISION_RADIUS, VIRTUAL_TIME_INTERVAL, PROFILE
+from .definitions import rules, get_ai_names, load_ai
+from .lib.log import warning, exception, info
+from .lib.nofloat import to_int, int_distance, PRECISION
+from .paths import MAPERROR_PATH
+from . import res
+from .worldability import Ability
+from .worldclient import DummyClient
+from .worldexit import passage
+from .worldorders import ORDERS_DICT
+from .worldplayerbase import Player, normalize_cost_or_resources
+from .worldplayercomputer import Computer
+from .worldplayerhuman import Human
+from . import worldrandom
+from .worldresource import Deposit, Meadow
+from .worldroom import Square
+from .worldunit import Unit, Worker, Soldier, Building, Effect
+from .worldupgrade import Upgrade
 
 
 GLOBAL_FOOD_LIMIT = 80
@@ -39,7 +39,7 @@ class Type(object):
 
     def init_dict(self, target):
         target.type_name = self.type_name
-        for k, v in self.dct.items():
+        for k, v in list(self.dct.items()):
             if k == "class":
                 continue
             if (hasattr(self.cls, k) or
@@ -97,7 +97,7 @@ class World(object):
         self.unit_classes = {}
         self.objects = {}
         self.harm_target_types = {}
-        self._command_queue = Queue.Queue()
+        self._command_queue = queue.Queue()
 
     def __getstate__(self):
         odict = self.__dict__.copy()
@@ -106,7 +106,7 @@ class World(object):
 
     def __setstate__(self, dict):
         self.__dict__.update(dict)
-        self._command_queue = Queue.Queue()
+        self._command_queue = queue.Queue()
 
     def remove_links_for_savegame(self): # avoid pickle recursion problem
         for z in self.squares:
@@ -147,7 +147,7 @@ class World(object):
     def get_objects(self, x, y, radius, filter=lambda x: True):
         radius_2 = radius * radius
         return [o for z in self.squares for o in z.objects
-                if filter(o) and square_of_distance(x, y, o.x, o.y) <= radius_2]
+                if list(filter(o)) and square_of_distance(x, y, o.x, o.y) <= radius_2]
 
     def get_place_from_xy(self, x, y):
         return self.grid.get((x / self.square_width,
@@ -245,7 +245,7 @@ class World(object):
                         observed_before_squares = p.observed_before_squares
                     p.push("voila", self.time,
                            _copy(p.memory), _copy(p.perception),
-                           p.observed_squares.keys(),
+                           list(p.observed_squares.keys()),
                            observed_before_squares,
                            collision_debug)
             except:
@@ -274,7 +274,7 @@ class World(object):
 
         At the moment, unit_classes contains also: upgrades, abilities...
         """
-        if not self.unit_classes.has_key(s):
+        if s not in self.unit_classes:
             try:
                 base = self.unit_base_classes[rules.get(s, "class")[0]]
             except:
@@ -342,7 +342,7 @@ class World(object):
 
     def _meadows(self):
         m = []
-        for square in sorted([x for x in self.grid.keys() if isinstance(x, str)]):
+        for square in sorted([x for x in list(self.grid.keys()) if isinstance(x, str)]):
             m.extend([square] * self.nb_meadows_by_square)
         m.extend(self.additional_meadows)
         for square in self.remove_meadows:
@@ -372,7 +372,7 @@ class World(object):
         if col == self.nb_columns:
             col = 0
         j = t[col] + i[1:]
-        if not self.grid.has_key(j):
+        if j not in self.grid:
             map_error("", "The west-east passage starting from %s doesn't exist." % i)
         return self.grid[i].east_side(), self.grid[j].west_side()
 
@@ -381,7 +381,7 @@ class World(object):
         if line == self.nb_lines + 1:
             line = 1
         j = i[0] + str(line)
-        if not self.grid.has_key(j):
+        if j not in self.grid:
             map_error("", "The south-north passage starting from %s doesn't exist." % i)
         return self.grid[i].north_side(), self.grid[j].south_side()
 
@@ -630,7 +630,7 @@ class World(object):
                 self.introduction = [4020] + self.objective
             else:
                 self.introduction = []
-        except MapError, msg:
+        except MapError as msg:
             warning("map error: %s", msg)
             self.map_error = "map error: %s" % msg
             return False
