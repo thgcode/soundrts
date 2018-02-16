@@ -147,11 +147,11 @@ class World(object):
     def get_objects(self, x, y, radius, filter=lambda x: True):
         radius_2 = radius * radius
         return [o for z in self.squares for o in z.objects
-                if list(filter(o)) and square_of_distance(x, y, o.x, o.y) <= radius_2]
+                if filter(o) and square_of_distance(x, y, o.x, o.y) <= radius_2]
 
     def get_place_from_xy(self, x, y):
-        return self.grid.get((x / self.square_width,
-                              y / self.square_width))
+        return self.grid.get((x // self.square_width,
+                              y // self.square_width))
 
     def clean(self):
         for p in self.players + self.ex_players:
@@ -361,8 +361,8 @@ class World(object):
             Meadow(self.grid[z])
 
     def _arrange_resources_symmetrically(self):
-        xc = self.nb_columns * 10 / 2
-        yc = self.nb_lines * 10 / 2
+        xc = self.nb_columns * 10 // 2
+        yc = self.nb_lines * 10 // 2
         for z in self.squares:
             z.arrange_resources_symmetrically(xc, yc)
 

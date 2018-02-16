@@ -54,7 +54,7 @@ class _Game(object):
 
     def replay_write(self, s):
         self._replay_file.write(s + "\n")
-      
+
     def _game_type(self):
         return "%s/%s/%s" % (VERSION,
                              self.game_type_name + "-" + self.map.get_name(),

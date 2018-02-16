@@ -924,7 +924,7 @@ class UseOrder(ComplexOrder):
                 u.player = None
                 u.place = None
                 u.id = None # so the unit will be added to world.active_objects
-                u.hp = u.hp_max / 3
+                u.hp = u.hp_max // 3
                 u.set_player(self.unit.player)
                 u.move_to(c.place, c.x, c.y)
                 if u.decay:
@@ -1041,4 +1041,3 @@ class UnloadAllOrder(TransportOrder):
 # for example: ORDERS_DICT["go"] == GoOrder
 ORDERS_DICT = dict([(_v.keyword, _v) for _v in list(locals().values())
                     if hasattr(_v, "keyword") and issubclass(_v, Order)])
-

@@ -223,8 +223,8 @@ class Creature(Entity):
         if rotation == 0:
             d = min(d, target_d) # stop before colliding target
         a = self.o + rotation
-        x = self.x + d * int_cos_1000(a) / 1000
-        y = self.y + d * int_sin_1000(a) / 1000
+        x = self.x + d * int_cos_1000(a) // 1000
+        y = self.y + d * int_sin_1000(a) // 1000
         return x, y
 
     def _heuristic_value(self, rotation, target_d):
@@ -439,7 +439,7 @@ class Creature(Entity):
 
     def heal_nearby_units(self):
         # level 1 of healing: 1 hp every 7.5 seconds
-        hp = self.heal_level * PRECISION / 25
+        hp = self.heal_level * PRECISION // 25
         allies = self.player.allied
         units = self.world.get_objects(self.x, self.y, 6 * PRECISION,
                 filter=lambda x: x.player in allies and x.is_healable and x.hp < x.hp_max)
@@ -467,7 +467,7 @@ class Creature(Entity):
 
     def harm_nearby_units(self):
         # level 1: 1 hp every 7.5 seconds
-        hp = self.harm_level * PRECISION / 25
+        hp = self.harm_level * PRECISION // 25
         units = self.world.get_objects(self.x, self.y, 6 * PRECISION,
                 filter=lambda x: x.is_vulnerable and self.can_harm(x))
         for u in units:
@@ -974,7 +974,7 @@ class BuildingSite(_Building):
         _Building.__init__(self, None, player, place, x, y)
         self.type = building_type
         self.hp_max = building_type.hp_max
-        self._starting_hp = building_type.hp_max * 5 / 100
+        self._starting_hp = building_type.hp_max * 5 // 100
         self.hp = self._starting_hp
         self.timer = building_type.time_cost / VIRTUAL_TIME_INTERVAL
         self.damage_during_construction = 0

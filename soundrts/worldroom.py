@@ -9,7 +9,7 @@ from .worldresource import Meadow
 
 SPACE_LIMIT = 144
 
-def square_spiral(x, y, step=COLLISION_RADIUS * 25 / 10):
+def square_spiral(x, y, step=COLLISION_RADIUS * 25 // 10):
     yield x, y
     sign = 1
     delta = 1
@@ -44,8 +44,8 @@ class Square(object):
         self.ymin = row * width
         self.xmax = self.xmin + width
         self.ymax = self.ymin + width
-        self.x = (self.xmax + self.xmin) / 2
-        self.y = (self.ymax + self.ymin) / 2
+        self.x = (self.xmax + self.xmin) // 2
+        self.y = (self.ymax + self.ymin) // 2
 
     @property
     def height(self):
@@ -230,11 +230,11 @@ class Square(object):
             x = self.x
             y = self.y
             if nb > 1:
-                a = 360 * i / nb + shift
+                a = 360 * i // nb + shift
                 # it is possible to add a constant to this angle and keep
                 # the symmetry
-                x += square_width * 35 / 100 * int_cos_1000(a) / 1000
-                y += square_width * 35 / 100 * int_sin_1000(a) / 1000
+                x += int(square_width * 35 / 100 * int_cos_1000(a) // 1000)
+                y += int(square_width * 35 / 100 * int_sin_1000(a) / 1000)
             o.move_to(o.place, x, y)
 
     def can_receive(self, airground_type, player=None):

@@ -336,7 +336,7 @@ class GameInterface(object):
         voice.previous()
 
     def cmd_history_stop(self):
-        next(voice)
+        voice.next()
 
     def cmd_history_next(self):
         voice.next(history_only=True)
