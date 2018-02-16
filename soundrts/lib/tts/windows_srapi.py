@@ -6,37 +6,25 @@ The only behavior provided is the behavior that tts.py needs.
 
 import ctypes
 import time
+from . import Tolk
 
-
-srapi_wait = .1
-
-# not used; provided for compatibility
+# These aren't used
 tts_async = 0
 tts_purge_before_speak = 0
 
-_srapi = ctypes.windll.ScreenReaderAPI
-
-
 class TTS(object):
 
-    _end_time = None
-
     def __init__(self):
-        _srapi.sapiEnable(1) # fall back to SAPI if no screen reader
+        Tolk.load()
 
     def IsSpeaking(self):
-        if self._end_time is None:
-            return False
-        else:
-            return self._end_time > time.time()
+        return Tolk.is_speaking()
 
     def Speak(self, text, *args):
-        _srapi.sayStringW(text, 1)
-        self._end_time = time.time() + len(text) * srapi_wait
+        Tolk.speak(text)
 
     def Stop(self):
-        _srapi.stopSpeech()
-        self._end_time = None
+        Tolk.silence()
 
 
 def Create():

@@ -177,11 +177,6 @@ class ResourceLoader(object):
                     if line:
                         key, value = line.split(None, 1)
                         if value:
-                            try:
-                                value = str(value, encoding_name)
-                            except ValueError:
-                                value = str(value, encoding_name, "replace")
-                                warning("in '%s', encoding error: %s", TXT_FILE, line)
                             result[key] = value
                         else:
                             warning("in '%s', line ignored: %s", TXT_FILE, line)

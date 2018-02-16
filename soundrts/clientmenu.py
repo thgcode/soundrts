@@ -153,7 +153,7 @@ class Menu(object):
         elif e.key == K_F5:
             voice.previous()
         elif e.key in [K_LALT,K_RALT]:
-            next(voice)
+            voice.next()
         elif e.key == K_F6:
             voice.next(history_only=True)
         elif e.key in [K_HOME, K_KP_PLUS]:

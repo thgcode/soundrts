@@ -123,7 +123,7 @@ class Map(object):
         except:
             s = ""
         s += self.additional_rules + self.additional_ai
-        return md5(s).hexdigest()
+        return md5(s.encode()).hexdigest()
 
     def _check_digest(self):
         if self.digest is None:
