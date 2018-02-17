@@ -21,7 +21,7 @@ class HTTPHandler(logging.Handler):
 
     def __init__(self, url):
         self._url = url
-        logging.Handler.__init__(self)
+        super().__init__()
 
     def emit(self, record):
         if self._done:
@@ -45,7 +45,7 @@ class SecureFileHandler(logging.FileHandler):
 
     def __init__(self, filename, mode='a', limit=1000000):
         self._records_limit = limit
-        logging.FileHandler.__init__(self, filename, mode)
+        super().__init__(filename, mode)
 
     def emit(self, record):
         if not self._too_many_records:

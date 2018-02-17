@@ -167,10 +167,10 @@ class Menu(object):
                 msg = input_string(msg=[4288], pattern="^[a-zA-Z0-9 .,'@#$%^&*()_+=?!]$", spell=False)
                 if msg:
                     self.server.write_line("say %s" % msg)
-        elif e.str and e.mod & KMOD_SHIFT:
+        elif e.unicode and e.mod & KMOD_SHIFT:
             self._select_next_choice(e.str, -1)
-        elif e.str:
-            self._select_next_choice(e.str)
+        elif e.unicode:
+            self._select_next_choice(e.unicode)
         elif e.key not in [K_LSHIFT,K_RSHIFT]:
             voice.item([4052])
 

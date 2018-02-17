@@ -946,7 +946,7 @@ class _Building(Creature):
     corpse = 0
 
     def __init__(self, prototype, player, square, x=0, y=0):
-        Creature.__init__(self, prototype, player, square, x, y)
+        super().__init__(prototype, player, square, x, y)
 
     def on_friend_unit_attacked(self, attacker):
         pass
@@ -956,7 +956,7 @@ class _Building(Creature):
         if attacker:
             attacker.player.nb_buildings_killed += 1
         place, x, y = self.place, self.x, self.y
-        Creature.die(self, attacker)
+        super().die(attacker)
         if self.building_land:
             self.building_land.move_to(place, x, y)
 
@@ -971,7 +971,7 @@ class BuildingSite(_Building):
 
     def __init__(self, player, place, x, y, building_type):
         player.pay(building_type.cost)
-        _Building.__init__(self, None, player, place, x, y)
+        super().__init__(None, player, place, x, y)
         self.type = building_type
         self.hp_max = building_type.hp_max
         self._starting_hp = building_type.hp_max * 5 // 100
@@ -1006,7 +1006,7 @@ class BuildingSite(_Building):
     def be_built(self):
         self.hp = min(self.hp + self.hp_delta, self.hp_max)
         self.timer -= 1
-        if self.timer == 0:
+        if self.timer <= 0:
             player, place, x, y, hp = self.player, self.place, self.x, self.y, self.hp
             blocked_exit = self.blocked_exit
             self.delete()
