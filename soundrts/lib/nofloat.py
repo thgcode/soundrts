@@ -31,7 +31,7 @@ def to_int(s):
     """convert a string to an integer with PRECISION"""
     assert isinstance(s, str)  # don't convert twice!
     result = int(float(s) * PRECISION)
-    if isinstance(result, int):
+    if result > sys.maxsize:
         warning("%s is a long integer (greater than %s).", result, sys.maxsize)
     return result
 

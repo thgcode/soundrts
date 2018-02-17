@@ -7,6 +7,7 @@ some are merged (some text files).
 
 import locale
 import os
+import sys
 
 from soundrts.lib import encoding
 from soundrts.lib.log import warning
@@ -173,7 +174,7 @@ class ResourceLoader(object):
             encoding_name = encoding.encoding(txt)
             for line in lines:
                 try:
-                    line = line.strip()
+                    line = bytes(line.strip(), "cp1252").decode(encoding_name)
                     if line:
                         key, value = line.split(None, 1)
                         if value:

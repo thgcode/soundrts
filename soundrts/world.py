@@ -39,7 +39,7 @@ class Type(object):
 
     def init_dict(self, target):
         target.type_name = self.type_name
-        for k, v in list(self.dct.items()):
+        for k, v in self.dct.items():
             if k == "class":
                 continue
             if (hasattr(self.cls, k) or
