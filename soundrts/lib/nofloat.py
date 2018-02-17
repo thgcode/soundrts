@@ -75,7 +75,7 @@ def int_angle(x1, y1, x2, y2):
     d = int_distance(x1, y1, x2, y2)
     if d == 0:
         return 0
-    c = (x2 - x1) * 100 / d  # 100 for the table
+    c = (x2 - x1) * 100 // d  # 100 for the table
     ac = _ACOS_TABLE[c]
     if y2 - y1 > 0:
         return ac

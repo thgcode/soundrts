@@ -336,7 +336,7 @@ class GameInterface(object):
         voice.previous()
 
     def cmd_history_stop(self):
-        next(voice)
+        voice.next()
 
     def cmd_history_next(self):
         voice.next(history_only=True)
@@ -1180,7 +1180,7 @@ class GameInterface(object):
                      (not local or self.zoom_mode and self.zoom.contains(x)
                       or not self.zoom_mode and x.is_in(local_place)) and \
                      (not idle or not x.orders)]
-                self.group += m[: len(m) / portion]
+                self.group += m[: len(m) // portion]
             if initial_unit.id not in self.group \
                and initial_unit.type_name in types:
                 if self.group:

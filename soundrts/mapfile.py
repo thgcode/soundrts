@@ -158,7 +158,7 @@ class Map(object):
             return self._original_map_string
         if os.path.isfile(self.path):
             map_name = os.path.split(self.path)[-1]
-            content = base64.b64encode(open(self.path, "U").read())
+            content = base64.b64encode(open(self.path, "U").read().encode("utf_8")).decode("utf_8")
             return map_name + "***" + content
         else:
             dest = os.path.join(TMP_PATH, "map.tmp")
