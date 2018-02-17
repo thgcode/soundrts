@@ -219,7 +219,7 @@ class Creature(Entity):
         return n
 
     def _future_coords(self, rotation, target_d):
-        d = self.speed * VIRTUAL_TIME_INTERVAL / 1000
+        d = self.speed * VIRTUAL_TIME_INTERVAL // 1000
         if rotation == 0:
             d = min(d, target_d) # stop before colliding target
         a = self.o + rotation
