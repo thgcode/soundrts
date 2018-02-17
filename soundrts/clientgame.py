@@ -682,7 +682,7 @@ class GameInterface(object):
     def _execute_order_shortcut(self, e):
         for o in self.orders():
             first_unit = self.dobjets[self.group[0]].model
-            if order_shortcut(o, first_unit) == e.str:
+            if order_shortcut(o, first_unit) == e.unicode:
                 self._select_order(o)
                 if order_args(o, first_unit) == 0:
                     self.cmd_validate()

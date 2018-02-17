@@ -46,9 +46,9 @@ def input_string(msg=[], pattern="^[a-zA-Z0-9]$", default="", spell=True):
             elif e.key == K_BACKSPACE:
                 s = s[:-1]
                 voice.item(string_to_msg(s, spell))
-            elif re.match(pattern, e.str) != None:
+            elif re.match(pattern, e.unicode) != None:
                 try:
-                    c = e.str.encode("ascii") # telnetlib doesn't like unicode
+                    c = e.unicode
                     s += c
                     voice.item(string_to_msg(c) + [9999] + string_to_msg(s, spell))
                 except:
